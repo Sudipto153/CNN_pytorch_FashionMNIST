@@ -42,28 +42,21 @@ class Network(nn.Module):
         self.out = nn.Linear(in_features = 90, out_features = 10)
         
     def forward(self, t):
-        t = F.relu(self.conv1(t))
+        t = F.relu(self.bn1(self.conv1(t)))
         t = F.max_pool2d(t, kernel_size = 2, stride = 2)
-        t = self.bn1(t)
         
-        t = F.relu(self.conv2(t))
+        t = F.relu(self.bn2(self.conv2(t)))
         t = F.max_pool2d(t, kernel_size = 2, stride = 2)
-        t = self.bn2(t)
         
-        t = F.relu(self.conv3(t))
+        t = F.relu(self.bn3(self.conv3(t)))
         t = F.max_pool2d(t, kernel_size = 2, stride = 2)
-        t = self.bn3(t)
         
-        t = F.relu(self.fc1(t.reshape(-1, 40*3*3)))
-        t = self.bn4(t)
-        
-        t = F.relu(self.fc2(t))
-        t = self.bn5(t)
+        t = F.relu(self.bn4(self.fc1(t.reshape(-1, 40*3*3))))
+        t = F.relu(self.bn5(self.fc2(t)))
         
         t = self.out(t)
         
         return t
-
 
 
 class RunBuilder():
